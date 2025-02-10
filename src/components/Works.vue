@@ -1,0 +1,79 @@
+<script setup>
+
+import { RouterLink } from 'vue-router'
+import { ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useThemeStore } from '@/stores/theme';
+import Button from '@/components/Button.vue'
+const theme = useThemeStore()
+const { isDark } = storeToRefs(theme)
+const { toggleDark } = theme;
+</script>
+
+<template>
+    <section class="min-h-[100vh] flex pt-[100px] flex-col pb-20 projects" id="works">
+        <h2 class="text-2xl " v-motion-fade-visible-once>My Works</h2>
+        <!-- Works Card -->
+        <section class="flex flex-col mt-10 gap-10 tablet:px-0">
+            <div v-motion-fade-visible-once class="  tablet:items-start flex-col-reverse justify-end tablet-large:flex-row flex tablet:justify-center  pb-0 rounded-xl  gap-3 tablet:gap-8"
+                :class="isDark ? 'bg-s-dm' : 'bg-s-lm'">
+                <div class=" w-[70%] aspect-[3/2] min-w-[320px]  pt-10 tablet:pt-10 tablet:pl-5 flex flex-col justify-end">
+                    <img src="../assets/yo.png" alt="" class="bg-gray-200 w-full h-full rounded-t-xl object-cover">
+                </div>
+                <div class="flex flex-col justify-center tablet-large:w-[50%] px-4 tablet:px-0">
+                    <div class="flex flex-col pb-4 tablet:pb-0 pt-10 gap-2">
+                        <span class="bg-gray-200 w-11 h-11 rounded-lg">
+                            <img src="../assets/fracturedjinx.jpg" alt="" class="w-full h-full rounded-lg object-cover">
+                        </span>
+                        <h2 class="text-2xl mt-3">GymPass</h2>
+                        <p class="min-h-[80px] text-md">
+                            A gym listing app made for gym-owners and gym enthusiasts that enables membership booking.
+                        </p>
+                        <div class="flex items-center gap-3 pb-4">
+                            <Button content="View" />
+                            <Button content="Github" iconStyle="fa-brands fa-github" extraStyle="" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div v-motion-fade-visible-once class="tablet:items-start flex-col justify-end tablet-large:flex-row flex tablet:justify-center  pb-0 rounded-xl  gap-3 tablet:gap-8"
+                :class="isDark ? 'bg-s-dm' : 'bg-s-lm'">
+                
+                <div class="flex flex-col justify-center tablet-large:w-[50%] tablet:pl-5 px-4 ">
+                    <div class="flex flex-col pb-4 tablet:pb-0 pt-10 gap-2">
+                        <span class="bg-gray-200 w-11 h-11 rounded-lg">
+                            <img src="../assets/fracturedjinx.jpg" alt="" class="w-full h-full rounded-lg object-cover">
+                        </span>
+                        <h2 class="text-2xl mt-3">GymPass</h2>
+                        <p class="min-h-[80px] text-md">
+                            A gym listing app made for gym-owners and gym enthusiasts that enables membership booking.
+                        </p>
+                        <div class="flex items-center gap-3 pb-4">
+                            <Button content="View" />
+                            <Button content="Github" iconStyle="fa-brands fa-github" extraStyle="" />
+                        </div>
+                    </div>
+                </div>
+                <div class="w-[70%] aspect-[3/2] min-w-[320px]  pt-10 tablet:pt-10  flex flex-col justify-end">
+                    <img src="../assets/yo.png" alt="" class="bg-gray-200 w-full h-full rounded-tl-xl rounded-br-xl object-cover">
+                </div>
+            </div>
+
+
+
+
+
+        </section>
+
+    </section>
+</template>
+
+<style scoped>
+.connect-btn-lm {
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+
+.connect-btn-dm {
+    border: 2px #81619E solid
+}
+</style>
