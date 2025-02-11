@@ -1,29 +1,59 @@
 <script setup>
 import { RouterLink } from 'vue-router'
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useThemeStore } from '@/stores/theme';
 import Button from '@/components/Button.vue'
 import ButtonExt from '@/components/ButtonExt.vue'
+
 const theme = useThemeStore()
 const { isDark } = storeToRefs(theme)
 const { toggleDark } = theme;
 const email = import.meta.env.VITE_EMAIL
 
 const isOpen = ref(false);
+const isNavbarVisible = ref(true);
+let lastScrollY = window.scrollY;
+let scrollTimeout = null;
 
 const toggleIsOpen = () => {
-    isOpen.value = !isOpen.value
+    isOpen.value = !isOpen.value;
 }
+
+const handleScroll = () => {
+    const currentScrollY = window.scrollY;
+
+    if (currentScrollY > lastScrollY + 10) {
+        isNavbarVisible.value = false; // Hide header when scrolling down
+    } else if (currentScrollY < lastScrollY - 10) {
+        isNavbarVisible.value = true; // Show header when scrolling up
+    }
+
+    lastScrollY = currentScrollY;
+
+    // Ensure header reappears when scrolling stops
+    if (scrollTimeout) clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+        isNavbarVisible.value = true;
+    }, 5000);
+};
+
+onMounted(() => {
+    window.addEventListener("scroll", handleScroll, { passive: true });
+});
+
+onUnmounted(() => {
+    window.removeEventListener("scroll", handleScroll);
+});
 
 
 </script>
 
 <template>
-    <div class="sticky top-0 z-10" :class="isDark ? 'bg-bg-dm/85' : 'bg-bg-lm/70'">
-        <header
-            class="z-9 flex items-center laptop:px-[15%] tablet:px-[8%] px-[2%] py-[20px] justify-between sticky absolute top-0 backdrop-blur-xl"
-            >
+    <div class="sticky top-0 z-10"
+        >
+        <header :class="[isNavbarVisible ? 'translate-y-0' : '-translate-y-full',isDark ? 'bg-bg-dm/85' : 'bg-bg-lm/70' ]"
+            class=" transition-transform duration-300 ease-in-out z-9 flex items-center laptop:px-[15%] tablet:px-[8%] px-[2%] py-[20px] justify-between sticky absolute top-0 backdrop-blur-xl">
             <span>
                 <RouterLink to="/" class=" text-xl font-semibold">biaka.dev</RouterLink>
             </span>
@@ -37,9 +67,9 @@ const toggleIsOpen = () => {
 
 
                 <span class="flex items-center text-xl  gap-8">
-                    <i class="fa-regular fa-moon cursor-pointer" v-if="isDark" @click="toggleDark()"
+                    <i class="fa-regular fa-moon cursor-pointer dark:hover:text-bg-lm" v-if="isDark" @click="toggleDark()"
                         :class="isDark ? 'text-a-dm' : 'text-a-lm'"></i>
-                    <i class="fa-regular fa-sun cursor-pointer" v-else @click="toggleDark()"
+                    <i class="fa-regular fa-sun cursor-pointer hover:text-[#414141]" v-else @click="toggleDark()"
                         :class="isDark ? 'text-a-dm' : ''"></i>
                     <i class="tablet:hidden fa-solid fa-bars text-2xl cursor-pointer " @click="toggleIsOpen()"></i>
 
@@ -69,9 +99,9 @@ const toggleIsOpen = () => {
                 <div class="w-full flex items-center justify-between text-xl ">
 
                     <i class="tablet:hidden fa-solid fa-bars text-2xl cursor-pointer " @click="toggleIsOpen()"></i>
-                    <i class="fa-regular fa-moon cursor-pointer" v-if="isDark" @click="toggleDark()"
+                    <i class="fa-regular fa-moon cursor-pointer dark:hover:text-bg-lm" v-if="isDark" @click="toggleDark()"
                         :class="isDark ? 'text-a-dm' : 'text-a-lm'"></i>
-                    <i class="fa-regular fa-sun cursor-pointer" v-else @click="toggleDark()"
+                    <i class="fa-regular fa-sun cursor-pointer hover:text-[#414141]" v-else @click="toggleDark()"
                         :class="isDark ? 'text-a-dm' : ''"></i>
                 </div>
                 <div class="flex flex-col pt-5">
@@ -101,4 +131,5 @@ const toggleIsOpen = () => {
 
 .slider:focus-within .bg {
     visibility: visible;
-}</style>
+}
+</style>
